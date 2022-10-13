@@ -1,0 +1,311 @@
+@font-face {
+  font-family: "Goyang";
+  src: url("fonts/Goyang.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+html {
+  box-sizing: border-box;
+}
+body {
+  transition: background-color 0.2s, color 0.2s;
+}
+body * {
+  font-family: Goyang;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+#App {
+  margin: 1.5em auto;
+  max-width: 1200px;
+  column-gap: 1.5em;
+}
+#App > *:not(section, .Loading, .ImageInfo) {
+  margin-bottom: 16px;
+}
+
+.ThemeContainer {
+  display: flex;
+  font-size: 24px;
+  margin-bottom: 16px;
+}
+.ThemeContainer * {
+  cursor: pointer;
+}
+.ThemeContainer .toggle {
+  position: relative;
+}
+#themeToggle {
+  position: relative;
+  width: 40px;
+  height: 20px;
+  visibility: hidden;
+}
+.ThemeContainer .switch {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 40px;
+  height: 20px;
+  margin: 3px;
+  background-color: bisque;
+  border-radius: 20px;
+}
+.ThemeContainer .switch .ball {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  margin: 2px;
+  background-color: #000;
+  transition: transform 0.2s;
+}
+.dark .ball {
+  transform: translateX(20px);
+}
+
+.HistoryButton {
+  font-size: 24px;
+  margin: 16px 0;
+}
+
+.HistoryButton button {
+  font-size: inherit;
+}
+
+.Banner {
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+.Banner .container {
+  display: flex;
+  /* gap: 5px; */
+  position: relative;
+  align-items: center;
+  height: 100px;
+}
+.Banner .container.leftToRight .item img{
+  animation: leftToRight 1s forwards;
+}
+.Banner .container.rightToLeft .item img{
+  animation: rightToLeft 1s forwards;
+}
+.Banner .item {
+  flex: 1 0 20%;
+  height: 100%;
+  visibility: visible;
+  overflow: hidden;
+  opacity: 1;
+  transition: all 0.2s;
+}
+.Banner .item img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+.Banner button {
+  position: absolute;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.2s, visibility 0.2s;
+  cursor: pointer;
+}
+.Banner:hover button {
+  visibility: visible;
+  opacity: 1;
+}
+.Banner .prev {
+  left: 10px;
+}
+.Banner .next {
+  right: 10px;
+}
+@keyframes rightToLeft {
+  from {
+    transform: translateX(50px);
+    opacity: 0.5;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+@keyframes leftToRight {
+  from {
+    transform: translateX(-50px);
+    opacity: 0.5;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* SearchResult start */
+.SearchResult {
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(250px, 1fr));
+  grid-gap: 10px;
+}
+
+.SearchResult img {
+  width: 100%;
+  object-fit: cover;
+  min-height: 100%;
+}
+
+.SearchResult .item {
+  position: relative;
+  display: inline-block;
+  margin: 0 0 1em;
+  width: 100%;
+}
+.SearchResult .item div {
+  visibility: hidden;
+  background-color: #eee;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.7;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.SearchResult .item:hover div {
+  visibility: visible;
+}
+/* SearchResult end */
+
+/* header start */
+header {
+  display: flex;
+  font-size: 40px;
+}
+
+.SearchInput {
+  flex: 1 0 80%;
+  font-size: inherit;
+  padding: 10px 15px;
+  border: 1px solid #000;
+  transition: background-color 0.2s, border 0.2s;
+}
+
+.SearchButton {
+  flex: 1 0 20%;
+  font-size: inherit;
+}
+/* header end */
+
+/* ImageInfo pop start */
+.ImageInfo {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  opacity: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  visibility: hidden;
+  transition: all 0.3s;
+}
+.ImageInfo.active {
+  visibility: visible;
+  opacity: 1;
+}
+
+.ImageInfo .title {
+  display: flex;
+  justify-content: space-between;
+}
+
+.ImageInfo .title,
+.ImageInfo .description {
+  padding: 5px;
+}
+
+.ImageInfo .content-wrapper {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  border: 1px solid #eee;
+  border-radius: 5px;
+}
+
+.ImageInfo .content-wrapper img {
+  width: 100%;
+}
+/* ImageInfo pop end */
+
+/* dark mode 처리 */
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #000;
+    color: #fff;
+  }
+}
+body.dark {
+  background-color: #000;
+  color: #fff;
+}
+.dark .SearchInput {
+  background-color: #000;
+  color: #fff;
+  border: 1px solid #eee;
+}
+.dark .ImageInfo .content-wrapper {
+  background-color: #000;
+  border: 1px solid #111;
+}
+.dark .SearchResult .item div {
+  background-color: #000;
+}
+
+
+/*
+992px 이하: 3개
+768px 이하: 2개
+576px 이하: 1개
+*/
+@media screen and (max-width: 992px) {
+  .SearchResult {
+    grid-template-columns: repeat(3, minmax(250px, 1fr));
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .SearchResult {
+    grid-template-columns: repeat(2, minmax(250px, 1fr));
+  }
+
+  .ImageInfo .content-wrapper {
+    width: 98%;
+    left: 49%;
+    padding-left: 6px;
+    transform: translate(-51%, -50%);
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .SearchResult {
+    grid-template-columns: repeat(1, minmax(250px, 1fr));
+  }
+}
