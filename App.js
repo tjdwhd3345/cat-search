@@ -43,11 +43,11 @@ function App({ $target }) {
     switch (action) {
       case 'data':
         this.state.data = payload;
-        this.searchResult.setState(this.state.data);
+        this.searchResult.setState('data', this.state.data);
         break;
       case 'append':
-        this.state.data = [...this.state.data, ...payload];
-        this.searchResult.setState(this.state.data);
+        // this.state.data = [...this.state.data, ...payload];
+        this.searchResult.setState('append', payload);
         break;
       case 'keyword':
         this.state.keyword = payload;

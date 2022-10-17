@@ -11,10 +11,24 @@ function SearchResult({
   this.state = {
     data: initialData,
   };
-  this.setState = (nextData) => {
-    console.log('SearchResult #setState', { data: this.state.data, nextData });
-    this.state.data = nextData;
-    this.render();
+  this.setState = (action, nextData) => {
+    console.log('SearchResult #setState', {
+      action,
+      data: this.state.data,
+      nextData,
+    });
+    switch (action) {
+      case 'data':
+        this.state.data = nextData;
+        this.render();
+        break;
+      case 'append':
+        // this.state.data = nextData;
+        this.appendRender(nextData);
+        break;
+      default:
+        break;
+    }
   };
 
   container.addEventListener('click', (e) => {
@@ -77,7 +91,7 @@ function SearchResult({
     }
   };
 
-  this.intersectionTimerId;
+  this.intersectionTimerId = null;
   this.infiniteLoading = () => {
     if ('IntersectionObserver' in window) {
       // IntersectionObserver를 지원하는 경우
@@ -89,22 +103,35 @@ function SearchResult({
           if (entry.isIntersecting) {
             const image = entry.target;
             imageObserver.unobserve(image);
-            if (this.intersectionTimerId)
-              clearTimeout(this.intersectionTimerId);
-            this.intersectionTimerId = setTimeout(() => {
-              onIntersectingLastImage();
-            }, 2000);
-
-            console.log('last entry is intersect.', {
-              entry,
-              timerId: this.intersectionTimerId,
-            });
+            onIntersectingLastImage();
           }
         });
       });
 
       // 옵저버에 요소 등록
       lastImage && imageObserver.observe(lastImage);
+    }
+  };
+
+  this.appendRender = (appendData) => {
+    console.log('appendRender SearchResult', { appendData });
+    const lastIndex = container.childElementCount;
+    container.innerHTML += appendData
+      .map((cat, index) => {
+        return `
+            <li class="item" data-index="${index + lastIndex}">
+              <img class="lazy" data-src='${cat.url}' alt='${cat.name}'>
+              <div>${cat.name}</div>
+            </li>
+          `;
+      })
+      .join('');
+    this.lazyLoading();
+    if (!this.intersectionTimerId) {
+      this.intersectionTimerId = setTimeout(() => {
+        this.infiniteLoading();
+        this.intersectionTimerId = null;
+      }, 2000);
     }
   };
 
